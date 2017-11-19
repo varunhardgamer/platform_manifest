@@ -1,0 +1,34 @@
+language: android
+jdk: oraclejdk8
+
+before_install:
+- sudo apt-get install openjdk-8-jdk
+- sudo apt install repo
+- sudo apt-get update && sudo apt-get install git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev libwxgtk2.8-dev squashfs-tools build-essential zip curl libncurses5-dev zlib1g-dev openjdk-8-jre openjdk-8-jdk pngcrush schedtool libxml2 libxml2-utils xsltproc lzop libc6-dev schedtool g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline-gplv2-dev gcc-multilib maven tmux screen w3m ncftp
+
+script:
+- git config --global user.email "gamelovr695@gmail.com"
+- git config --global user.name "varunhardgamer"
+- mkdir ${TRAVIS_BUILD_DIR}/bin
+- PATH=~/bin:$PATH
+- curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ${TRAVIS_BUILD_DIR}/bin/repo
+- chmod a+x ${TRAVIS_BUILD_DIR}/bin/repo
+- mkdir ${TRAVIS_BUILD_DIR}/RR
+- cd ${TRAVIS_BUILD_DIR}/RR
+- repo init -u https://github.com/ResurrectionRemix/platform_manifest.git -b nougat
+- repo sync -f --force-sync --no-clone-bundle
+- git clone https://github.com/dev-harsh1998/android_device_lenovo_a6000 -b cm-14.1 device/lenovo/a6000
+- git clone https://github.com/dev-harsh1998/kernel_lenovo_msm8916 -b cm-14.1 kernel/lenovo/a6000
+- git clone https://github.com/LineageOS/android_device_qcom_common -b cm-14.1 device/qcom/common
+- git clone https://github.com/LineageOS/android_device_cyanogen_msm8916-common -b cm-14.1 device/cyanogen/msm8916-common
+- git clone https://github.com/LineageOS/android_external_stlport -b cm-14.1 external/stlport
+- git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8 prebuilts/gcc/linux-x86/arm/arm-eabi-4.8
+- git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9
+- > ${TRAVIS_BUILD_DIR}/RR/build.sh
+- echo "#!/bin/bash" >> ${TRAVIS_BUILD_DIR}/RR/build.sh
+- echo "make clobber" >> ${TRAVIS_BUILD_DIR}/RR/build.sh
+- echo ". build/envsetup.sh" >> ${TRAVIS_BUILD_DIR}/RR/build.sh
+- echo "brunch a6000" >> ${TRAVIS_BUILD_DIR}/RR/build.sh
+- chmod +x build.sh
+- .${TRAVIS_BUILD_DIR}/RR/build.sh
+- cd ${TRAVIS_BUILD_DIR}/RR/out/target/product/a6000/ && curl --upload-file ./RR*a6000.zip https://transfer.sh/RR*a6000.zip
