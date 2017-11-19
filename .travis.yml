@@ -24,7 +24,6 @@ script:
 - git clone https://github.com/LineageOS/android_external_stlport -b cm-14.1 external/stlport
 - git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8 prebuilts/gcc/linux-x86/arm/arm-eabi-4.8
 - git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9
-- > ${TRAVIS_BUILD_DIR}/RR/build.sh
 - echo "#!/bin/bash" >> ${TRAVIS_BUILD_DIR}/RR/build.sh
 - echo "make clobber" >> ${TRAVIS_BUILD_DIR}/RR/build.sh
 - echo ". build/envsetup.sh" >> ${TRAVIS_BUILD_DIR}/RR/build.sh
